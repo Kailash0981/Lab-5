@@ -1,0 +1,69 @@
+#include <iostream>
+#include <list>
+using namespace std;
+
+class HashTable {
+    int size;
+    list<int> *table;
+
+public:
+    HashTable(int n) {
+        size = n;
+        table = new list<int>[size];
+    }
+
+    int hashFunction(int key) {
+        return key % size;
+    }
+
+    void insert(int key) {
+        int index = hashFunction(key);
+        table[index].push_back(key);
+    }
+
+    void search(int key) {
+        int index = hashFunction(key);
+        for (auto x : table[index]) {
+            if (x == key) {
+                cout << key << " found at index " << index << endl;
+                return;
+            }
+        }
+        cout << key << " not found!" << endl;
+    }
+
+    void deleteKey(int key) {
+        int index = hashFunction(key);
+        table[index].remove(key);
+        cout << key << " deleted if it existed." << endl;
+    }
+
+    void display() {
+        for (int i = 0; i < size; i++) {
+            cout << i << ": ";
+            for (auto x : table[i])
+                cout << x << " -> ";
+            cout << "NULL\n";
+        }
+    }
+};
+
+int main() {
+    int size, choice, key;
+    cout << "Enter size of hash table: ";
+    cin >> size;
+    HashTable ht(size);
+
+    while (true) {
+        cout << "\n1. Insert\n2. Search\n3. Delete\n4. Display\n5. Exit\nEnter choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1: cout << "Enter key: "; cin >> key; ht.insert(key); break;
+            case 2: cout << "Enter key: "; cin >> key; ht.search(key); break;
+            case 3: cout << "Enter key: "; cin >> key; ht.deleteKey(key); break;
+            case 4: ht.display(); break;
+            case 5: return 0;
+            default: cout << "Invalid choice!\n";
+        }
+    }
+}
